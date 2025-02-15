@@ -1,0 +1,112 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_LEFT_RIGHT()
+
+title Детализация сервиса ядра автоматизации БП (уровень Code)
+
+package "Обработчик БП" {
+    class Orchestrator {
+        +startProcess(processId: String): void
+        +handleTask(task: Task): void
+        +notifyCompletion(taskId: String): void
+    }
+
+    class Interpreter {
+        +interpretStep(step: Step): void
+        +sendNotification(message: String): void
+    }
+
+    class Scheduler {
+        +scheduleTask(task: Task): void
+        +checkTaskStatus(taskId: String): TaskStatus
+    }
+
+    class ContextSerializer {
+        +serialize(context: Context): String
+        +deserialize(contextString: String): Context
+    }
+}
+
+package "Обработчик БП подключаемого модуля" {
+    class Choreographer {
+        +handleTask(task: Task): void
+        +notifyCompletion(taskId: String): void
+    }
+
+    class Executor {
+        +interpretStep(step: Step): void
+        +sendNotification(message: String): void
+    }
+}
+
+package "Ядро функциональности" {
+    class BPSerializer {
+        +serializeBP(bp: BusinessProcess): String
+        +deserializeBP(bpString: String): BusinessProcess
+    }
+
+    class ModuleHub {
+        +registerModule(module: Module): void
+        +getModuleConfig(moduleId: String): ModuleConfig
+    }
+
+    class LifecycleService {
+        +startService(serviceId: String): void
+        +stopService(serviceId: String): void
+    }
+
+    class MessageController {
+        +sendMessage(topic: String, message: String): void
+        +receiveMessage(topic: String): String
+    }
+}
+
+package "Шина данных" {
+    class KafkaTaskProducer {
+        +produceTask(task: Task): void
+    }
+
+    class KafkaTaskConsumer {
+        +consumeTask(): Task
+    }
+
+    class KafkaDataRequester {
+        +requestData(request: DataRequest): void
+    }
+
+    class KafkaDataResponder {
+        +respondData(response: DataResponse): void
+    }
+}
+
+' Связи внутри Обработчика БП
+Orchestrator --> Interpreter : uses
+Orchestrator --> Scheduler : uses
+Orchestrator --> ContextSerializer : uses
+Interpreter --> Scheduler : checks status
+Scheduler --> ContextSerializer : serializes/deserializes context
+
+' Связи внутри Ядра функциональности
+BPSerializer --> ModuleHub : registers BP
+ModuleHub --> LifecycleService : manages lifecycle
+LifecycleService --> MessageController : sends/receives messages
+
+' Связи с шиной данных
+Orchestrator --> KafkaTaskProducer : produces tasks
+KafkaTaskConsumer --> Orchestrator : delivers tasks
+
+Choreographer --> KafkaTaskProducer : produces tasks
+KafkaTaskConsumer --> Choreographer : delivers tasks
+
+Interpreter --> KafkaDataRequester : requests data
+KafkaDataResponder --> Interpreter : delivers data
+
+Executor --> KafkaDataRequester : requests data
+KafkaDataResponder --> Executor : delivers data
+
+' Связи между компонентами
+Interpreter --> MessageController : sends notifications
+ModuleHub --> BPSerializer : provides BP data
+
+@enduml
