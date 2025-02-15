@@ -1,0 +1,95 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_LEFT_RIGHT()
+title Декомпозиция ограниченных контекстов ядра
+
+System_Boundary(c1, "Микросервисы ядра") {
+    System(s1, "Конфигуратор пространства", "Управление пространствами, настройка окружений", $sprite="cogs")
+    System(s2, "Конфигуратор модулей", "Управление модулями, их версиями и зависимостями", $sprite="cubes")
+    System(s3, "Пользователи и ролевая модель", "Управление пользователями, ролями и правами доступа", $sprite="users")
+    System(s5, "Шаблоны", "Создание и управление шаблонами для быстрого развертывания", $sprite="copy")
+    System(s6, "Нотификации", "Отправка уведомлений пользователям и системам", $sprite="bell")
+
+    Container_Boundary(s7, "Обработчик БП") {
+        Container(s7_orchestrator, "Оркестратор", "Управляет выполнением бизнес-процессов", $sprite="project-diagram")
+        Container(s7_interpreter, "Интерпретатор БП", "Интерпретирует шаги бизнес-процессов", $sprite="code")
+        Container(s7_scheduler, "Планировщик задач", "Планирует выполнение задач", $sprite="calendar-alt")
+        Container(s7_serializer, "Сериализатор контекста", "Сериализует и десериализует контекст выполнения", $sprite="archive")
+    }
+
+    Container_Boundary(s8, "Ядро функциональности") {
+        Container(s8_bp_serializer, "Сериализатор БП", "Сериализует и десериализует бизнес-процессы", $sprite="archive")
+        Container(s8_module_hub, "Концентратор функционала модулей", "Интегрирует функционал модулей (API Gateway)", $sprite="network-wired")
+        Container(s8_lifecycle, "Сервис жизнедеятельности", "Управляет жизненным циклом компонентов", $sprite="heartbeat")
+        Container(s8_message_controller, "Контроллер сообщений", "Управляет топиками Kafka", $sprite="exchange-alt")
+    }
+
+    Container_Boundary(s10, "Конструктор БП") {
+        Container(s10_bp_storage, "Хранилище БП", "Хранит бизнес-процессы", $sprite="database")
+        Container(s10_bp_mapping, "Хранилище отображения БП", "Хранит отображения бизнес-процессов", $sprite="map")
+        Container(s10_config_aggregator, "Агрегатор конфигурации модулей", "Собирает конфигурации модулей для БП", $sprite="layer-group")
+    }
+
+    ' Шина данных внутри ядра
+    Container_Boundary(data_bus, "Шина данных") {
+        Container(kafka_task_produce, "Kafka: task-produce", "Топик для отправки задач", $sprite="exchange-alt")
+        Container(kafka_task_consume, "Kafka: task-consume", "Топик для возврата результатов", $sprite="exchange-alt")
+        Container(kafka_data_request, "Kafka: data-request", "Топик для запроса данных", $sprite="exchange-alt")
+        Container(kafka_data_response, "Kafka: data-response", "Топик для получения данных", $sprite="exchange-alt")
+    }
+}
+
+System_Boundary(c2, "Присоединяемый модуль") {
+    Container_Boundary(s9, "Обработчик БП модуля") {
+        Container(s9_choreographer, "Хореограф", "Управляет потоком задач", $sprite="project-diagram")
+        Container(s9_executor, "Исполнитель", "Выполняет задачи", $sprite="play")
+    }
+    System(s9_config, "Конфигурация модуля", "Управление моделями данных и доступными действиями", $sprite="cogs")
+}
+
+' Связи между ядром и модулем через шину данных
+Rel(s7_orchestrator, kafka_task_produce, "Отправляет задачи")
+Rel(kafka_task_produce, s9_choreographer, "Доставляет задачи")
+Rel(s9_executor, kafka_task_consume, "Возвращает результаты")
+Rel(kafka_task_consume, s7_orchestrator, "Доставляет результаты")
+
+Rel(s8_message_controller, kafka_data_request, "Запрашивает данные")
+Rel(kafka_data_request, s9_config, "Доставляет запрос данных")
+Rel(s9_config, kafka_data_response, "Возвращает данные")
+Rel(kafka_data_response, s8_message_controller, "Доставляет данные")
+
+' Связи между ядром и конфигурацией модуля
+Rel(s10_config_aggregator, s9_config, "Запрашивает модели данных", "API")
+Rel(s10_config_aggregator, s9_config, "Запрашивает доступные действия", "API")
+
+' Связи внутри ядра
+Rel(s1, s8_module_hub, "Передает данные о пространствах", "API")
+Rel(s2, s8_module_hub, "Передает данные о модулях", "API")
+Rel(s3, s8_module_hub, "Передает данные о пользователях и ролях", "API")
+Rel(s5, s8_module_hub, "Передает шаблоны для использования", "API")
+Rel(s7_interpreter, s6, "Отправляет уведомления", "API")
+Rel(s8_module_hub, s7_orchestrator, "Передает задачи для выполнения", "API")
+Rel(s7_orchestrator, s10_bp_storage, "Передает данные о выполненных процессах", "API")
+Rel(s10_bp_storage, s8_module_hub, "Передает созданные бизнес-процессы", "API")
+
+' Связи внутри Обработчика БП
+Rel(s7_orchestrator, s7_interpreter, "Управляет интерпретацией", "API")
+Rel(s7_interpreter, s7_scheduler, "Запрашивает планирование задач", "API")
+Rel(s7_scheduler, s7_serializer, "Сериализует контекст выполнения", "API")
+Rel(s7_serializer, s7_orchestrator, "Десериализует контекст выполнения", "API")
+
+' Связи внутри Ядра функциональности
+Rel(s8_bp_serializer, s8_module_hub, "Сериализует/десериализует БП", "API")
+Rel(s8_module_hub, s8_lifecycle, "Управляет жизненным циклом", "API")
+Rel(s8_lifecycle, s8_message_controller, "Обрабатывает сообщения", "API")
+
+' Связи внутри Конструктора БП
+Rel(s10_bp_storage, s10_bp_mapping, "Хранит отображения БП", "API")
+Rel(s10_bp_mapping, s10_config_aggregator, "Агрегирует конфигурации", "API")
+
+' Связи внутри Обработчика БП модуля
+Rel(s9_choreographer, s9_executor, "Управляет выполнением задач", "API")
+
+@enduml

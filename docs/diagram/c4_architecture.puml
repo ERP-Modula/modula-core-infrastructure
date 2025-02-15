@@ -1,0 +1,16 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+LAYOUT_WITH_LEGEND()
+title Декомпозиция ограниченных контекстов ядра
+System_Boundary(c1, "Микросервисы ядра") {
+    System(s1, "Конфигуратор пространства")
+    System(s2, "Конфигуратор модулей")
+    System(s3, "Пользователи и ролевая модель")
+    System(s5, "Шаблоны")
+    System(s6, "Нотификации")
+    System(s7, "Обработчик БП")
+    System(s8, "Ядро функциональности")
+
+}
+
+@enduml
