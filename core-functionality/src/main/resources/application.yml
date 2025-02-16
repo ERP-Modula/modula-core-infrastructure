@@ -1,0 +1,10 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+  cassandra:
+    keyspace-name: my_keyspace
+    contact-points: localhost
+    port: 9042
