@@ -1,14 +1,9 @@
 plugins {
-    id("java")
+    kotlin("jvm") version "2.0.0"
 }
 
-group = "ru.modula.platform"
-version = "1.0-SNAPSHOT"
+group = "ru.modula.core"
 
 repositories {
     mavenCentral()
-}
-
-tasks.test {
-    useJUnitPlatform()
 }
