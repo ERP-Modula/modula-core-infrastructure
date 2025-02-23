@@ -1,6 +1,6 @@
 package domain.process
 
 data class NodePlacement(
-    private val x: Int,
-    private val y: Int,
+    val x: Int,
+    val y: Int,
 )

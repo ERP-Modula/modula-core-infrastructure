@@ -3,12 +3,12 @@ package domain.process
 import java.util.UUID
 
 data class ProcessNode(
-    private val id: String,
-    private val localId: UUID,
-    private val previousNode: ProcessNode?,
-    private val nextNodes: List<ProcessNode>,
-    private val nodeType: NodeType,
-    private val source: String,
-    private val sourceActionId: String,
-    private val actionConfiguration: Map<String, String>
+    val id: String,
+    val localId: UUID,
+    val previousNode: ProcessNode?,
+    val nextNodes: List<ProcessNode>,
+    val nodeType: NodeType,
+    val source: String,
+    val sourceActionId: String,
+    val actionConfiguration: Map<String, String>
 )
