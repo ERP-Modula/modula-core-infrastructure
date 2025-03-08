@@ -20,6 +20,7 @@ configurations {
 }
 
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
@@ -29,10 +30,11 @@ dependencies {
 
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
 //	implementation project(path: ':common-lib')
 //	implementation project(':common-lib')
-
-	implementation project(':common-lib')
 
 
 	compileOnly 'org.projectlombok:lombok'

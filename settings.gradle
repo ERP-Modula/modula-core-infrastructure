@@ -1,3 +1,2 @@
 rootProject.name = 'modula-core'
-include 'common-lib', 'core-functionality', 'core-processor'
-project(':common-lib').projectDir = file('./common-lib')
+include 'common-lib', 'core-functionality', 'core-processor', 'eureka-server'
