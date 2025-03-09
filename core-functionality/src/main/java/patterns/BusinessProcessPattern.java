@@ -11,7 +11,7 @@ public class BusinessProcessPattern {
     private String name;
     private String description;
     private List<Module> modulesIncluded;
-    private List<BusinessProcess> businessProcesses;
+//    private List<BusinessProcess> businessProcesses;
 }
 
 //    private val uuid: UUID,

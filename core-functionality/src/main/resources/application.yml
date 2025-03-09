@@ -13,5 +13,3 @@ spring:
     keyspace-name: my_keyspace
     contact-points: localhost
     port: 9042
-
-eureka
