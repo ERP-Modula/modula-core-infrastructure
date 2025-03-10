@@ -8,4 +8,4 @@ RUN ./gradlew :core-processor:clean :core-processor:build -x test
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "modules/modula-platform/build/libs/core-processor.jar"]
+CMD ["java", "-jar", "core-processor/build/libs/core-processor.jar"]
