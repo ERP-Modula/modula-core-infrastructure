@@ -1,0 +1,11 @@
+FROM openjdk:21-jdk-slim
+
+WORKDIR /app
+COPY . .
+
+RUN chmod +x gradlew
+RUN ./gradlew :core-processor:clean :core-processor:build -x test
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "modules/modula-platform/build/libs/core-processor.jar"]

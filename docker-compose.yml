@@ -42,6 +42,39 @@ services:
     volumes:
       - kafka_data:/var/lib/kafka/data
 
+  core-functionality:
+    build:
+      context: .
+      dockerfile: core-functionality/Dockerfile
+    container_name: core-functionality
+    depends_on:
+      - cassandra
+      - kafka
+    ports:
+      - "8081:8080"
+
+  core-processor:
+    build:
+      context: .
+      dockerfile: core-processor/Dockerfile
+    container_name: core-processor
+    depends_on:
+      - cassandra
+      - kafka
+    ports:
+      - "8082:8080"
+
+  modula-platform:
+    build:
+      context: .
+      dockerfile: modules/modula-platform/Dockerfile
+    container_name: modula-platform
+    depends_on:
+      - cassandra
+      - kafka
+    ports:
+      - "8083:8080"
+
 volumes:
   cassandra_data:
   kafka_data:
