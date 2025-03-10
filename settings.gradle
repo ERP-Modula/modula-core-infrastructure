@@ -1,2 +1,5 @@
 rootProject.name = 'modula-core'
 include 'common-lib', 'core-functionality', 'core-processor', 'eureka-server'
+include 'modules:modula-platform'
+findProject(':modules:modula-platform')?.name = 'modula-platform'
+
