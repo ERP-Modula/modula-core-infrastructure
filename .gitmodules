@@ -1,3 +1,4 @@
-[submodule "modula-platform"]
-    path = modules/modula-platform
-    url = https://github.com/ERP-Modula/modula-platform.git
+[submodule "modules/modula-platform"]
+	path = modules/modula-platform
+	url = https://github.com/ERP-Modula/modula-platform.git
+	branch = google-docs
