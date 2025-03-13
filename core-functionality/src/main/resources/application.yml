@@ -13,3 +13,11 @@ spring:
     keyspace-name: my_keyspace
     contact-points: localhost
     port: 9042
+    username: cassandra
+    password: cassandra
+    schema-action: CREATE_IF_NOT_EXISTS
+    local-datacenter: datacenter1
+  datasource:
+    enabled: false
+  jpa:
+    enabled: false
