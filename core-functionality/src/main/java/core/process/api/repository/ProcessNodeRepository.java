@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProcessNodeRepository extends CassandraRepository<ProcessNode, String> {
-    List<ProcessNode> findByProcessId(UUID processId);
+    List<ProcessNode> findById(UUID processId);
 }

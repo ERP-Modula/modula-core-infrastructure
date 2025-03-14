@@ -1,14 +1,22 @@
-version: '3.8'
-
 services:
   cassandra:
     image: cassandra:4.1
     ports:
-      - "9042:9042"
+      - "0.0.0.0:9042:9042"
     environment:
-      - CASSANDRA_CLUSTER_NAME=my_cluster
+      - CASSANDRA_CLUSTER_NAME=processes
+      - CASSANDRA_AUTHENTICATOR=AllowAllAuthenticator
+      - CASSANDRA_AUTHORIZER=AllowAllAuthorizer
     volumes:
       - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -u cassandra -p cassandra -e 'describe keyspaces'" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks:
+      - brokers
+
   init-cassandra:
     image: cassandra:4.1
     depends_on:
@@ -41,6 +49,8 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - kafka_data:/var/lib/kafka/data
+    networks:
+      - brokers
 
   core-functionality:
     build:
@@ -48,10 +58,14 @@ services:
       dockerfile: core-functionality/Dockerfile
     container_name: core-functionality
     depends_on:
-      - cassandra
-      - kafka
+      cassandra:
+          condition: service_healthy
+      kafka:
+        condition: service_started
     ports:
       - "8081:8080"
+    networks:
+      - brokers
 
   core-processor:
     build:
@@ -70,11 +84,19 @@ services:
       dockerfile: modules/modula-platform/Dockerfile
     container_name: modula-platform
     depends_on:
-      - cassandra
-      - kafka
+      cassandra:
+        condition: service_healthy
+      kafka:
+        condition: service_started
     ports:
       - "8083:8080"
+    networks:
+      - brokers
 
 volumes:
   cassandra_data:
   kafka_data:
+
+networks:
+  brokers:
+    driver: bridge

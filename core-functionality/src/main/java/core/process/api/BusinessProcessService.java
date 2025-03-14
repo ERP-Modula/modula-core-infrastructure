@@ -26,7 +26,7 @@ public class BusinessProcessService {
     }
 
     public ProcessNode addProcessNode(UUID processId, ProcessNode processNode) {
-        processNode.setId(UUID.randomUUID().toString());
+        processNode.setId(UUID.randomUUID());
         processNode.setLocalId(processId);
         return processNodeRepository.save(processNode);
     }
@@ -45,6 +45,6 @@ public class BusinessProcessService {
     }
 
     public List<ProcessNode> getProcessNodes(UUID processId) {
-        return processNodeRepository.findByProcessId(processId);
+        return processNodeRepository.findById(processId);
     }
 }

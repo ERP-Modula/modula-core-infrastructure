@@ -12,7 +12,7 @@ import java.util.UUID;
 @Table("process_nodes")
 public class ProcessNode {
     @PrimaryKey
-    private String id;
+    private UUID id;
 
     private UUID localId;
     private ProcessNode previousNode;
