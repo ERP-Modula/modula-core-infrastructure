@@ -101,6 +101,19 @@ services:
     networks:
       - brokers
 
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: gateway
+    depends_on:
+      init-cassandra:
+        condition: service_completed_successfully
+      kafka:
+        condition: service_started
+    ports:
+      - "8084:8080"
+
 volumes:
   cassandra_data:
   kafka_data:

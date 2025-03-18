@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class
 })
-public class CoreFunctionalityService {
+public class  CoreFunctionalityService {
     public static void main(String[] args) {
         SpringApplication.run(CoreFunctionalityService.class, args);
     }

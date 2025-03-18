@@ -1,53 +1,37 @@
 package core.process.api.http;
 
-import core.process.api.BusinessProcessService;
+import core.process.api.services.BusinessProcessService;
 import domain.process.BusinessProcess;
-import domain.process.ProcessNode;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/processes")
-@RequiredArgsConstructor
 public class BusinessProcessController {
 
-    private final BusinessProcessService businessProcessService;
+    @Autowired
+    private BusinessProcessService businessProcessService;
 
     @PostMapping
     public ResponseEntity<BusinessProcess> createBusinessProcess(@RequestBody BusinessProcess businessProcess) {
-        BusinessProcess createdProcess = businessProcessService.createBusinessProcess(businessProcess);
-        return ResponseEntity.ok(createdProcess);
+        BusinessProcess createdPattern = businessProcessService.createBusinessProcess(businessProcess);
+        return ResponseEntity.ok(createdPattern);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<BusinessProcess> getBusinessProcess(@PathVariable UUID id) {
-        Optional<BusinessProcess> process = businessProcessService.getBusinessProcess(id);
-        return process.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping
+    public ResponseEntity<List<BusinessProcess>> getAllBusinessProcesses() {
+        List<BusinessProcess> processes = businessProcessService.getAllBusinessProcesses();
+        return ResponseEntity.ok(processes);
     }
 
-    @PostMapping("/{id}/nodes")
-    public ResponseEntity<ProcessNode> addProcessNode(@PathVariable UUID id, @RequestBody ProcessNode processNode) {
-        ProcessNode createdNode = businessProcessService.addProcessNode(id, processNode);
-        return ResponseEntity.ok(createdNode);
+    @GetMapping("/id")
+    public ResponseEntity<BusinessProcess> getBusinessProcessById(@PathVariable UUID id) {
+        BusinessProcess processe = businessProcessService.getBusinessProcess(id);
+        return ResponseEntity.ok(processe);
     }
 
-    @PutMapping("/nodes/{nodeId}")
-    public ResponseEntity<ProcessNode> updateProcessNode(@PathVariable String nodeId, @RequestBody ProcessNode updatedNode) {
-        try {
-            ProcessNode updated = businessProcessService.updateProcessNode(nodeId, updatedNode);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/{id}/nodes")
-    public ResponseEntity<List<ProcessNode>> getProcessNodes(@PathVariable UUID id) {
-        List<ProcessNode> nodes = businessProcessService.getProcessNodes(id);
-        return ResponseEntity.ok(nodes);
-    }
 }
