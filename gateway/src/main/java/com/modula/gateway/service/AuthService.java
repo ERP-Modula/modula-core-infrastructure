@@ -9,8 +9,10 @@ import com.modula.gateway.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,6 @@ public class AuthService {
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
                 .build();
 
         userRepository.save(user);
@@ -33,9 +34,7 @@ public class AuthService {
                 new org.springframework.security.core.userdetails.User(
                         user.getUsername(),
                         user.getPassword(),
-                        java.util.Collections.singletonList(
-                                new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole().name())
-                        )
+                        Collections.emptyList()
                 )
         );
 
@@ -60,9 +59,7 @@ public class AuthService {
                 new org.springframework.security.core.userdetails.User(
                         user.getUsername(),
                         user.getPassword(),
-                        java.util.Collections.singletonList(
-                                new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + user.getRole().name())
-                        )
+                        Collections.emptyList()
                 )
         );
 

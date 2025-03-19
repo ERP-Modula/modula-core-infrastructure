@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .map(user -> new User(
                         user.getUsername(),
                         user.getPassword(),
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                        Collections.emptyList()
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
