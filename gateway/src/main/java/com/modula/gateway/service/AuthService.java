@@ -40,7 +40,6 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtToken)
-                .username(user.getUsername())
                 .build();
     }
 
@@ -65,7 +64,6 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtToken)
-                .username(user.getUsername())
                 .build();
     }
 }
