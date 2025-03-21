@@ -28,6 +28,10 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new RuntimeException("User already exists");
+        }
+
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(
