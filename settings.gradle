@@ -1,5 +1,5 @@
 rootProject.name = 'modula-core'
-include 'core-processor', 'eureka-server'
+include 'core-processor', 'eureka-server', 'gateway'
 
 // Modules to be included
 include 'modula-core-builder'
