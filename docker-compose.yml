@@ -1,4 +1,16 @@
 services:
+  postgres_db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: core_builder
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   cassandra:
     image: cassandra:4.1
     ports:
@@ -16,6 +28,7 @@ services:
       retries: 10
     networks:
       - brokers
+
 
   init-cassandra:
     image: cassandra:4.1
@@ -58,53 +71,52 @@ services:
     networks:
       - brokers
 
-  core-functionality:
-    build:
-      context: .
-      dockerfile: core-functionality/Dockerfile
-    container_name: core-functionality
-    depends_on:
-      init-cassandra:
-        condition: service_completed_successfully
-      kafka:
-        condition: service_started
-    ports:
-      - "8081:8080"
-    networks:
-      - brokers
+#  core-builder:
+#    build:
+#      context: .
+#      dockerfile: modula-core-builder/Dockerfile
+#    container_name: core-builder
+#    depends_on:
+#      postgres_db:
+#          condition: service_started
+#      kafka:
+#          condition: service_started
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/core_builder
+#      SPRING_DATASOURCE_USERNAME: your_username
+#      SPRING_DATASOURCE_PASSWORD: your_password
+#    ports:
+#      - "8081:8080"
+#    networks:
+#      - brokers
 
-  core-processor:
-    build:
-      context: .
-      dockerfile: core-processor/Dockerfile
-    container_name: core-processor
-    depends_on:
-      init-cassandra:
-        condition: service_completed_successfully
-      kafka:
-        condition: service_started
-    ports:
-      - "8082:8080"
+#  core-processor:
+#    build:
+#      context: .
+#      dockerfile: core-processor/Dockerfile
+#    container_name: core-processor
+#    depends_on:
+#      init-cassandra:
+#        condition: service_completed_successfully
+#      kafka:
+#        condition: service_started
+#    ports:
+#      - "8082:8080"
 
-  modula-platform:
-    build:
-      context: .
-      dockerfile: modules/modula-platform/Dockerfile
-    container_name: modula-platform
-    depends_on:
-      cassandra:
-        condition: service_healthy
-      kafka:
-        condition: service_started
-    ports:
-      - "8083:8080"
-    networks:
-      - brokers
-
+#  google-docs:
+#    build:
+#      context: .
+#      dockerfile: modules/google/google-docs/Dockerfile
+#    container_name: google-docs
+#    ports:
+#      - "8083:8080"
+#    networks:
+#      - brokers
 volumes:
   cassandra_data:
   kafka_data:
   zookeeper_data:
+  postgres_data:
 
 networks:
   brokers:
