@@ -10,8 +10,10 @@ application:
   users:
     defaultUsers:
       admin:
+        # admin: admin
         username: admin
-        password: $2a$12$LQV1c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfT.qJp.6aVCwJS
+        password: $2a$12$TPDXjh.Ci8uWiIv1pztl7O66Be9SkLdVFOw8bi6eoKQl8w2lt9Kfi
       user:
+        # user: user
         username: user
-        password: $2a$12$LQV1c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewfT.qJp.6aVCwJS
+        password: $2a$12$y09PMDXW1Um/eVFZyZ6T6O1MKsqGB3diUg0EBV0jL13rQtDcEAF.O
