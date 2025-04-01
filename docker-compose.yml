@@ -53,6 +53,28 @@ services:
     ports:
       - "8081:8081"
 
+  core-builder:
+    image: filimonsha/modula-core-builder
+    build:
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+        - GITHUB_USER=${GITHUB_USER}
+    container_name: core-builder
+    depends_on:
+      - postgres_db
+      - liquibase-migrations
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/modula
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      SERVER_PORT: 8082
+    networks:
+      - brokers
+      - backend
+    ports:
+      - "8082:8082"
+
+
 #  cassandra:
 #    image: cassandra:4.1
 #    ports:
@@ -112,24 +134,7 @@ services:
 #    networks:
 #      - brokers
 
-#  core-builder:
-#    build:
-#      context: .
-#      dockerfile: modula-core-builder/Dockerfile
-#    container_name: core-builder
-#    depends_on:
-#      postgres_db:
-#          condition: service_started
-#      kafka:
-#          condition: service_started
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/core_builder
-#      SPRING_DATASOURCE_USERNAME: your_username
-#      SPRING_DATASOURCE_PASSWORD: your_password
-#    ports:
-#      - "8081:8080"
-#    networks:
-#      - brokers
+
 
 #  core-processor:
 #    build:
