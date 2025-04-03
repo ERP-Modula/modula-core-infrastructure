@@ -23,6 +23,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             cd modula-core-infrastructure && 
+            git pull &&
             docker compose pull && 
             docker compose up -d
           "
