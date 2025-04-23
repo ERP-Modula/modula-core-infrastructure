@@ -1,3 +1,4 @@
+INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('37b80394-9a27-4765-b394-f0dd50f9ebee', 'document', 'document', 'ARRAY', false);
 INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('c76ebe00-f34d-4520-97e7-025b5648aaa4', 'capabilities', 'capabilities', 'ARRAY', false);
 INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('ef226816-9d57-43b4-bd91-24b0b084d814', 'canAddChildren', 'canAddChildren', 'BOOLEAN', false);
 INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('15ab36ee-88fa-4534-b377-eaf2b9c51614', 'canAddMyDriveParent', 'canAddMyDriveParent', 'BOOLEAN', false);
@@ -8,6 +9,7 @@ INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('a
 INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('21cb3196-d500-40a3-b511-5cf48615c234', 'canDelete', 'canDelete', 'BOOLEAN', false);
 INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('5eaf8eaa-c016-4856-bfb8-81de382d08dc', 'canDeleteChildren', 'canDeleteChildren', 'BOOLEAN', false);
 INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('dcf064d1-48df-4937-bbe6-cf0c7b0e224d', 'canDownload', 'canDownload', 'BOOLEAN', false);
+INSERT INTO output_interface (id, label, name, param_type_enum, time) VALUES ('afd689b4-a1aa-468f-a6b9-decfca82f8c0', 'name', 'name', 'STRING', false);
 
 INSERT INTO output_interface (label, name, time, param_type_enum) VALUES ('canEdit', 'canEdit', false, 'boolean');
 INSERT INTO output_interface (label, name, time, param_type_enum) VALUES ('canListChildren', 'canListChildren', false, 'boolean');

@@ -1,3 +1,5 @@
+INSERT INTO output_interface_spec (output_interface_id, spec_id) VALUES ('37b80394-9a27-4765-b394-f0dd50f9ebee', 'c76ebe00-f34d-4520-97e7-025b5648aaa4');
+INSERT INTO output_interface_spec (output_interface_id, spec_id) VALUES ('37b80394-9a27-4765-b394-f0dd50f9ebee', 'afd689b4-a1aa-468f-a6b9-decfca82f8c0');
 INSERT INTO output_interface_spec (output_interface_id, spec_id) VALUES ('c76ebe00-f34d-4520-97e7-025b5648aaa4', 'ef226816-9d57-43b4-bd91-24b0b084d814');
 INSERT INTO output_interface_spec (output_interface_id, spec_id) VALUES ('c76ebe00-f34d-4520-97e7-025b5648aaa4', '15ab36ee-88fa-4534-b377-eaf2b9c51614');
 INSERT INTO output_interface_spec (output_interface_id, spec_id) VALUES ('c76ebe00-f34d-4520-97e7-025b5648aaa4', '7d88d879-6130-4d47-a6c3-5e15e6ef84a2');
