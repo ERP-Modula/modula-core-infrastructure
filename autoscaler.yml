@@ -8,9 +8,18 @@ metric_stores:
 autoscale_rules:
   - service_name: modula-stack_google-docs
     scale_min: 1
-    scale_max: 3
+    scale_max: 5
     scale_step: 1
     metric_store: monitoring
-    metric_query: scalar(avg(rate(http_requests_total{job="google-docs"}[5m])))
-    scale_up_threshold: 300
-    scale_down_threshold: 200
+    metric_query: 100 * avg(system_cpu_usage{job="google-docs"})
+    scale_up_threshold: 80
+    scale_down_threshold: 50
+
+  - service_name: modula-stack_google-docs
+    scale_min: 1
+    scale_max: 5
+    scale_step: 1
+    metric_store: monitoring
+    metric_query: kafka_consumergroup_lag_sum{consumergroup="consumer-group-2"}
+    scale_up_threshold: 500
+    scale_down_threshold: 100
