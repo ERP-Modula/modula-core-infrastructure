@@ -132,4 +132,52 @@ VALUES
 --     ('a1b2c3d4-5678-90ab-cdef-1234567890ab', 'l1m2n3o4-5678-90ab-cdef-1234567890ab');
 
 
+WITH inserted_deal_trigger AS (
+    INSERT INTO module_trigger (
+        id,
+        type,
+        name,
+        label,
+        description,
+        endpoint_url
+    ) VALUES (
+        'b1a2c3d4-5678-9101-1121-314151617181',
+        'WEBHOOK',
+        'ONCRMDEALADD',
+        'Новая сделка',
+        'Срабатывает при создании сделки в Bitrix24',
+        'event.bind'
+    )
+    RETURNING id
+),
+-- 2. Триггер "Новый контакт"
+inserted_contact_trigger AS (
+    INSERT INTO module_trigger (
+        id,
+        type,
+        name,
+        label,
+        description,
+        endpoint_url
+    ) VALUES (
+        'c2d3e4f5-6789-1011-1213-141516171819',
+        'WEBHOOK',
+        'onCrmContactAdd',
+        'Новый контакт',
+        'Срабатывает при создании контакта в Bitrix24',
+        'event.bind'
+    )
+    RETURNING id
+)
 
+-- Связываем триггеры с модулем Bitrix
+INSERT INTO module_configuration_triggers (module_configuration_id, triggers_id)
+VALUES
+    (
+        (SELECT id FROM module_configuration WHERE name = 'bitrix'),
+        (SELECT id FROM inserted_deal_trigger)
+    ),
+    (
+        (SELECT id FROM module_configuration WHERE name = 'bitrix'),
+        (SELECT id FROM inserted_contact_trigger)
+    );
