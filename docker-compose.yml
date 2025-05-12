@@ -3,7 +3,6 @@ version: "3.9"
 services:
   postgres_db:
     image: postgres:13
-#    container_name: postgres_db
     environment:
       POSTGRES_DB: modula
       POSTGRES_USER: admin
@@ -15,11 +14,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres_init:/docker-entrypoint-initdb.d
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
 
 
   liquibase-migrations:
@@ -29,26 +23,14 @@ services:
     networks:
       - backend
     command:
-#      - --hub-mode=off
       - --changelog-file=changelog/master.xml
       - --driver=org.postgresql.Driver
       - --url=jdbc:postgresql://postgres_db:5432/modula
       - --username=admin
       - --password=admin
-#      - --defaultSchemaName=google_docs
       - update
     volumes:
       - ./migrations/changelog:/liquibase/changelog
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 3s
-        max_attempts: 3
-#        window: 60s
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
 
   prometheus:
     image: prom/prometheus:latest
@@ -56,10 +38,6 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -70,11 +48,6 @@ services:
       - 22181:2181
     networks:
       - backend
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
 
 
   kafka:
@@ -96,17 +69,12 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
     networks:
       - backend
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
 
   kafka-ui:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
     ports:
-      - 8091:8080
+      - "8091:8080"
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
@@ -114,18 +82,12 @@ services:
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
     networks:
       - backend
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
 
   google-docs:
     build:
       args:
         - GITHUB_TOKEN=${GITHUB_TOKEN}
         - GITHUB_USER=${GITHUB_USER}
-#    container_name: google_module
     image: vuhtang/google-app:latest
     depends_on:
       - postgres_db
@@ -145,11 +107,9 @@ services:
       - backend
     ports:
       - "8081:8081"
-    deploy:
-      replicas: 1
 
   core-builder:
-    image: filimonsha/modula-core-builder
+    image: filimonsha/modula-core-builder:latest
     build:
       args:
         - GITHUB_TOKEN=${GITHUB_TOKEN}
@@ -168,6 +128,27 @@ services:
       - backend
     ports:
       - "8082:8082"
+
+  core-processor:
+    image: filimonsha/core-processor:latest
+    depends_on:
+      - postgres_db
+      - liquibase-migrations
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/modula
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      SERVER_PORT: 8080
+      KAFKA-BROKERS: kafka:29092
+      CORE_BUILDER_CLIENT_URL: http://core-builder:8082/
+    networks:
+      - backend
+    ports:
+      - target: 8080
+        published: 8080
+
+
+
 
 #  core-processor:
 #    build:
@@ -209,9 +190,6 @@ services:
 
 
 volumes:
-#  cassandra_data:
-#  kafka_data:
-#  zookeeper_data:
   postgres_data:
 
 networks:
