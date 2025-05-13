@@ -152,8 +152,8 @@ WITH inserted_deal_trigger AS (
         name,
         label,
         description,
-        webhook_subscrive_url,
-        webhook_unsubscrive_url
+        webhook_subscribe_url,
+        webhook_unsubscribe_url
 
     ) VALUES (
         'b1a2c3d4-5678-9101-1121-314151617181',
@@ -175,8 +175,8 @@ inserted_contact_trigger AS (
         name,
         label,
         description,
-        webhook_subscrive_url,
-        webhook_unsubscrive_url
+        webhook_subscribe_url,
+        webhook_unsubscribe_url
     ) VALUES (
         'c2d3e4f5-6789-1011-1213-141516171819',
         'WEBHOOK',
