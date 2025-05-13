@@ -50,23 +50,36 @@ values (
     ''
 );
 
--- 4. Добавляем действие "Создать сделку" (action)
+-- 4. Добавляем действия "Создать сделку", создать задачу,
 
-    insert into module_action (id, name, label, description, category, endpoint_url)
+    insert into module_action (id, name, label, description, category, endpoint_url, method_type)
     values (
         'c3d4e5f6-3456-7891-0111-213141516172',
         'create_deal',
         'Создать сделку',
         'Создает новую сделку в CRM Bitrix24',
         'crm',
-        '/crm.deal.add'
+        '/crm.deal.add',
+        'POST'
+    ),(
+        'c3d4e5f6-3556-7891-0111-213141516172',
+        'tasks.task.add',
+        'Создать Задачу',
+        'Создает новую задачу в CRM Bitrix24',
+        'tasks',
+        '/tasks.task.add',
+        'POST'
     );
+
 
 -- Связываем действие с модулем
 insert into module_configuration_actions (module_configuration_id, actions_id)
 values (
     'b2c3d4e5-2345-6789-1011-121314151617',
     'c3d4e5f6-3456-7891-0111-213141516172'
+),(
+    'b2c3d4e5-2345-6789-1011-121314151617',
+    'c3d4e5f6-3556-7891-0111-213141516172'
 );
 -- 3. Добавляем основной обязательный параметр connection
 INSERT INTO input_parameter (id, name, label, required, help, type)
@@ -139,14 +152,20 @@ WITH inserted_deal_trigger AS (
         name,
         label,
         description,
-        endpoint_url
+        endpoint_url,
+        webhook_subscrive_url,
+        webhook_unsubscrive_url
+
     ) VALUES (
         'b1a2c3d4-5678-9101-1121-314151617181',
         'WEBHOOK',
         'ONCRMDEALADD',
         'Новая сделка',
         'Срабатывает при создании сделки в Bitrix24',
-        'event.bind'
+        'event.bind',
+        'event.bind',
+        'event.unbind'
+
     )
     RETURNING id
 ),
@@ -158,14 +177,18 @@ inserted_contact_trigger AS (
         name,
         label,
         description,
-        endpoint_url
+        endpoint_url,
+        webhook_subscrive_url,
+        webhook_unsubscrive_url
     ) VALUES (
         'c2d3e4f5-6789-1011-1213-141516171819',
         'WEBHOOK',
         'onCrmContactAdd',
         'Новый контакт',
         'Срабатывает при создании контакта в Bitrix24',
-        'event.bind'
+        'event.bind',
+        'event.bind',
+        'event.unbind'
     )
     RETURNING id
 )
