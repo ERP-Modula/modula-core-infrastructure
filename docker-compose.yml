@@ -157,7 +157,7 @@ services:
       - "8082:8082"
 
   core-processor:
-    image: filimonsha/core-processor:latest
+    image: filimonsha/modula-core-processor:latest
     depends_on:
       - postgres_db
       - liquibase-migrations
