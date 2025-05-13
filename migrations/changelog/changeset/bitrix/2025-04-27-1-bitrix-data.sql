@@ -152,7 +152,6 @@ WITH inserted_deal_trigger AS (
         name,
         label,
         description,
-        endpoint_url,
         webhook_subscrive_url,
         webhook_unsubscrive_url
 
@@ -162,7 +161,6 @@ WITH inserted_deal_trigger AS (
         'ONCRMDEALADD',
         'Новая сделка',
         'Срабатывает при создании сделки в Bitrix24',
-        'event.bind',
         'event.bind',
         'event.unbind'
 
@@ -177,7 +175,6 @@ inserted_contact_trigger AS (
         name,
         label,
         description,
-        endpoint_url,
         webhook_subscrive_url,
         webhook_unsubscrive_url
     ) VALUES (
@@ -186,7 +183,6 @@ inserted_contact_trigger AS (
         'onCrmContactAdd',
         'Новый контакт',
         'Срабатывает при создании контакта в Bitrix24',
-        'event.bind',
         'event.bind',
         'event.unbind'
     )
