@@ -128,6 +128,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/modula
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
+      HOSTNAME: "http://82.202.142.56"
       KAFKA-BROKERS: kafka:29092
       SERVER_PORT: 8083
     networks:
