@@ -1,6 +1,6 @@
 -- 1. Создаем рабочее пространство
 
-insert INTO workspace (id,description,favorite,last_edit,"name",workflows_count,workspace_icon_path) VALUES
+insert INTO workspace (id,description,favorite,last_edit,"name",workspace_icon_path) VALUES
 	 ('a95b051e-702f-40e3-b71d-cc5a84656581'::uuid,'Битрикс Автоматизация',true,'2025-04-15 18:21:34.048','Test',2,'string');
 
 
