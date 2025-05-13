@@ -1,7 +1,7 @@
 -- 1. Создаем рабочее пространство
 
 insert INTO workspace (id,description,favorite,last_edit,"name",workspace_icon_path) VALUES
-	 ('a95b051e-702f-40e3-b71d-cc5a84656581'::uuid,'Битрикс Автоматизация',true,'2025-04-15 18:21:34.048','Test',2,'string');
+	 ('a95b051e-702f-40e3-b71d-cc5a84656581'::uuid,'Битрикс Автоматизация',true,'2025-04-15 18:21:34.048','Test','string');
 
 
 INSERT INTO folder (id,"name",parent_folder_id,workspace_id) VALUES
