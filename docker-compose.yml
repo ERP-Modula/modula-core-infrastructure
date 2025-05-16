@@ -129,6 +129,7 @@ services:
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
       HOSTNAME: http://82.202.142.56:8083
+      CORE_BUILDER_CLIENT_URL: http://core-builder:8082/
       KAFKA-BROKERS: kafka:29092
       SERVER_PORT: 8083
     networks:
